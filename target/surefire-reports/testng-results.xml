@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" ignored="2" total="3" passed="1">
+  <reporter-output>
+  </reporter-output>
+  <suite name="suite" duration-ms="29936" started-at="2017-08-04T00:04:56Z" finished-at="2017-08-04T00:05:26Z">
+    <groups>
+    </groups>
+    <test name="Unregistered Customer" duration-ms="29936" started-at="2017-08-04T00:04:56Z" finished-at="2017-08-04T00:05:26Z">
+      <class name="apilipen.potterybarnkids.www.tests.PBKtests">
+        <test-method status="PASS" signature="setUp()[pri:0, instance:apilipen.potterybarnkids.www.tests.PBKtests@64a4dd8d]" name="setUp" is-config="true" duration-ms="7063" started-at="2017-08-03T17:04:56Z" finished-at="2017-08-03T17:05:03Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method status="PASS" signature="BeforeMethod()[pri:0, instance:apilipen.potterybarnkids.www.tests.PBKtests@64a4dd8d]" name="BeforeMethod" is-config="true" duration-ms="6204" started-at="2017-08-03T17:05:03Z" finished-at="2017-08-03T17:05:09Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- BeforeMethod -->
+        <test-method status="PASS" signature="test_03_UC([Ljava.lang.String;)[pri:0, instance:apilipen.potterybarnkids.www.tests.PBKtests@64a4dd8d]" name="test_03_UC" duration-ms="16367" started-at="2017-08-03T17:05:09Z" data-provider="tcID_03_UC" finished-at="2017-08-03T17:05:26Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[Ljava.lang.String;@e3275d3]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- test_03_UC -->
+        <test-method status="PASS" signature="afterTest()[pri:0, instance:apilipen.potterybarnkids.www.tests.PBKtests@64a4dd8d]" name="afterTest" is-config="true" duration-ms="122" started-at="2017-08-03T17:05:26Z" finished-at="2017-08-03T17:05:26Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- afterTest -->
+        <test-method status="PASS" signature="afterClass()[pri:0, instance:apilipen.potterybarnkids.www.tests.PBKtests@64a4dd8d]" name="afterClass" is-config="true" duration-ms="136" started-at="2017-08-03T17:05:26Z" finished-at="2017-08-03T17:05:26Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- afterClass -->
+      </class> <!-- apilipen.potterybarnkids.www.tests.PBKtests -->
+    </test> <!-- Unregistered Customer -->
+  </suite> <!-- suite -->
+</testng-results>

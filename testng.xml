@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="suite">
+
+    <test name="Unregistered Customer">
+
+
+        <classes>
+            <class name="apilipen.potterybarnkids.www.tests.PBKtests">
+            <methods>
+                <exclude name="test_01_UC"/>
+                <exclude name="test_02_UC"/>
+                <include name="test_03_UC"/>
+
+
+
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

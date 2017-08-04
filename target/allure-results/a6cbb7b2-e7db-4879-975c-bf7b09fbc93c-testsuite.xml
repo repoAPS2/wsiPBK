@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:test-suite start="1501805096528" stop="1501805131496" version="1.5.2" xmlns:ns2="urn:model.allure.qatools.yandex.ru">
+    <name>suite : Unregistered Customer</name>
+    <title>suite : Unregistered Customer</title>
+    <test-cases>
+        <test-case start="1501805119920" stop="1501805126192" status="passed">
+            <name>test_03_UC[[Ljava.lang.String;@e3275d3]</name>
+            <steps/>
+            <attachments/>
+            <labels>
+                <label name="testSuite" value="suite"/>
+                <label name="testGroup" value="Unregistered Customer"/>
+                <label name="testClass" value="apilipen.potterybarnkids.www.tests.PBKtests"/>
+                <label name="testMethod" value="test_03_UC"/>
+                <label name="host" value="AnnaMac-2.local"/>
+                <label name="thread" value="15104@AnnaMac-2.local.main(1)"/>
+            </labels>
+        </test-case>
+    </test-cases>
+    <labels>
+        <label name="framework" value="TestNG"/>
+        <label name="language" value="JAVA"/>
+    </labels>
+</ns2:test-suite>
