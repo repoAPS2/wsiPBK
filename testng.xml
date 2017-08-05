@@ -10,7 +10,8 @@
             <methods>
                 <exclude name="test_01_UC"/>
                 <exclude name="test_02_UC"/>
-                <include name="test_03_UC"/>
+                <exclude name="test_03_UC"/>
+                <include name="test_04_UC"/>
 
 
 

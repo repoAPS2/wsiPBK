@@ -7,9 +7,13 @@ import java.util.ArrayList;
 
 public class BaseUtils {
 
+   // public  static  final String dataSource = System.getProperty("csv"); // "src/test/java/resourses/testData/testData1.csv"
 
+  public static final  String fileName = "testData1";
 
-    public    static String[] [] readInputDataTestID  (String testID, String filePath)throws IOException {
+   public static String  filePath = "src/test/java/resourses/testData/"  + fileName + ".csv";
+
+    public    static String[] [] readInputDataTestID  (String testID)throws IOException {  // , String filePath
         String [][] test = null;
         int row = 0;
         String cvsLine = "";

@@ -1,6 +1,9 @@
 package apilipen.potterybarnkids.www.pages;
 
+import apilipen.potterybarnkids.www.utils.AuthenticationQA;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -13,9 +16,16 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.safari.SafariOptions;
+import org.openqa.selenium.logging.*;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.sikuli.script.FindFailed;
 
-
+import org.openqa.selenium.JavascriptExecutor;
+import java.awt.Toolkit;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,10 +78,16 @@ public class ApplicationManager {
 //     private String secureUrlQA = Config.getSecureURL();
 //     private String env = Config.getEnv();
 
-//     static String usernamePBK = "pbqauser";
-//     static String passwordPBK = "hm3Furn";
+     public final String ENV = System.getProperty("env");
 
+     public  String prodUrl = null;
+     public  String urlQA = null;
+     public  String sUrlQA = null;
 
+     static String usernamePBK = "pbqauser";
+     static String passwordPBK = "hm3Furn";
+
+   //  public WebDriverWait wait;
 
      public void init(String browser) throws IOException {
           //	           String in_browser = System.getProperty("browser");
@@ -89,6 +105,8 @@ public class ApplicationManager {
           delivop = new DeliveryOptionPage(driver);
           paymentPage = new PaymentPage(driver);
 
+          readProperties ();
+
           System.out.println("Init method ends");
 
 
@@ -98,32 +116,76 @@ public class ApplicationManager {
      }
 
 
-     public void startExecuteTests ( String baseUrl ){
-        openHomePage(baseUrl);
+     public void startExecuteTests (  String driverType){
+      //  openHomePage(prodUrl);
 
 
 
-//          System.out.println("BeforeMethod()");
-//          if (driver == null) {System.out.println("BeforeMethod: driver is null!");}
-//
-//          try {
-//               if (env.equalsIgnoreCase("qa")) {
-//                    System.out.println("OpenQAHomePage started.");
-//                    openQAHomePage(url, secureUrlQA);
-//               } else if (env.equalsIgnoreCase("prod")) {
-//                    openHomePage(url);
-//               }
-//          } catch (Exception ex) {
-//               System.out.println (ex.getStackTrace());
-//          }
+          System.out.println("BeforeMethod()");
+          if (driver == null) {System.out.println("BeforeMethod: driver is null!");}
 
+          try {
+               if (ENV.equalsIgnoreCase("qa")) {
+                    System.out.println("OpenQAHomePage started.");
+                    openQAHomePage(urlQA, sUrlQA, driverType);
+               } else if (ENV.equalsIgnoreCase("prod")) {
+                    System.out.println("Open Production HomePage started.");
+                    openHomePage();
+
+
+               }
+          } catch (Exception ex) {
+               System.out.println (ex.getStackTrace());
+          }
+
+     }
+
+
+
+     public void openQAHomePage(String baseUrl, String secureUrl, String driverType) throws FindFailed, InterruptedException {
+
+//          ((JavascriptExecutor) this.driver).executeScript("alert('Test')");
+//          this.driver.switchTo().alert().accept();
+
+          if (driverType.equalsIgnoreCase("Firefox")){
+               System.out.println("Login-FF");
+               driver.get(secureUrl);
+               (new Thread(new AuthenticationQA(driverType,usernamePBK,passwordPBK))).start();  // , logBtn
+               System.out.println("Loading " + secureUrl);
+
+               driver.get(baseUrl);
+               (new Thread(new AuthenticationQA(driverType,usernamePBK,passwordPBK))).start(); //  , logBtn
+               System.out.println("Loading " + baseUrl);
+
+          }
+
+
+          else if(driverType.equalsIgnoreCase("CHROME")){
+               System.out.println("Loading " + secureUrl + ",  Current driverType:" +  driverType);
+               driver.get(secureUrl);
+                 AuthenticationQA.login(driverType,usernamePBK,passwordPBK); // , logBtn
+               // (new Thread(new AuthenticationQA(driverType,usernamePBK,passwordPBK))).start();
+               Thread.sleep(1_000L);
+               driver.get(baseUrl);
+               // (new Thread(new AuthenticationQA(driverType,usernamePBK,passwordPBK))).start();
+               AuthenticationQA.login(driverType,usernamePBK,passwordPBK);// , logBtn
+
+               System.out.println("Loading " + baseUrl);
+               Thread.sleep(1_000L);
+               driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+               driver.manage().window().maximize();
+
+          }
+
+          System.out.println(driverType +  " ......Driver and QA website is running ");
      }
 
 
 
 
 
-     public void openHomePage(String baseUrl) {
+
+     public void openHomePage() {
           Cookie mck = new Cookie("stickyOverlayLoaded","1","www.potterybarnkids.com","/",null,false);
 
           driver.get("http://www.potterybarnkids.com/404.hml"); //"http://www.potterybarnkids.com/404.hml" //
@@ -135,7 +197,7 @@ public class ApplicationManager {
           driver.manage().addCookie(mck);
           System.out.println("Cookies was loaded to the site...");
 
-          driver.get(baseUrl);
+          driver.get("http://" + prodUrl); // prodUrl  "http://www.potterybarnkids.com"
        //   driver.manage().window().maximize();
           System.out.println(" ......Driver and website is running ");
         //  driver.manage().window().maximize();
@@ -176,9 +238,46 @@ public class ApplicationManager {
 
 
 
+
+     public void readProperties () {
+          // String	file_path = "./src/main/resources/DataSource.properties";
+          try {
+               Properties property = new Properties();
+
+            if    (ENV.equalsIgnoreCase("prod"))
+               { property.load(new FileInputStream("./src/test/java/resourses/config/prod.properties"));
+                    prodUrl = property.getProperty("store.prod.ip"); }
+
+
+              else if (ENV.equalsIgnoreCase("qa")) {
+                    property.load(new FileInputStream("./src/test/java/resourses/config/qa.properties")) ;
+
+                 urlQA  = "http://" +  property.getProperty("store.prod.ip");
+                 sUrlQA=  "http://" +  property.getProperty("surl");
+               }
+
+
+               System.out.println("Propertirs file is set");
+
+          } catch (FileNotFoundException e) {
+               System.out.println("Method 'readProperties()' - BLOCK");
+               System.out.println();
+               System.out.println(e.getMessage());
+          } catch (IOException e) {
+               System.out.println("Method 'readProperties()' - BLOCK");
+               System.out.println();
+               System.out.println(e.getMessage());
+          }
+
+     }//END readProperties
+
+
+
+
+
      //"FF";
 
-     public static void setWebDriver(String browser) throws IOException {  // String browser
+     public  void setWebDriver(String browser) throws IOException {  // String browser
          // String browser = driverType ;//System.getProperty("browser");
           System.out.println("Driver type is: ["  +   browser   + "]");
           Logger logger = Logger.getLogger("");
@@ -233,7 +332,7 @@ public class ApplicationManager {
 
 
 
-          if (browser.equals("Firefox")) {
+          if (browser.equalsIgnoreCase("Firefox")) {
                System.setProperty("webdriver.gecko.driver", driverPath);  // String binaryPath = "/Applications/Firefox54.app/Contents/MacOS/firefox-bin";
 
                String binaryPath = "/Applications/Firefox54.app/Contents/MacOS/firefox-bin";
@@ -249,7 +348,9 @@ public class ApplicationManager {
                driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
                driver.manage().window().maximize();
 
-          } else if (browser.equals("Chrome")) {
+
+
+          } else if (browser.equalsIgnoreCase("Chrome")) {
                System.setProperty("webdriver.chrome.driver", driverPath);
                System.setProperty("webdriver.chrome.silentOutput", "true");
 
@@ -268,6 +369,8 @@ public class ApplicationManager {
                }
                driver = new ChromeDriver(option);
                driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+
 
 
           } else if (browser.equals("Safari")) {

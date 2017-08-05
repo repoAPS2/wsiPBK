@@ -16,10 +16,10 @@
   </properties>
 
 
-    <!--
+    <!--  <repositories>  -->
     <repositories>
         <repository>
-         OSSRH: com.sikulix
+            <!-- OSSRH: com.sikulix -->
             <name>com.sikulix</name>
             <id>com.sikulix</id>
             <url>https://oss.sonatype.org/content/groups/public</url>
@@ -33,7 +33,8 @@
                 <updatePolicy>always</updatePolicy>
             </snapshots>
         </repository>
-    </repositories>  -->
+    </repositories>
+
 
 
 
@@ -42,14 +43,12 @@
   <dependencies>
 
 
-      <!-- qa environment authentication
+      <!-- qa environment authentication   <version>1.1.0</version> 1.1.1-SNAPSHOT   -->
       <dependency>
           <groupId>com.sikulix</groupId>
           <artifactId>sikulixapi</artifactId>
-
-           <version>1.1.0</version>
           <version>1.1.1-SNAPSHOT</version>
-      </dependency>  -->
+      </dependency>
 
     <dependency>
       <groupId>org.testng</groupId>

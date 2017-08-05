@@ -23,20 +23,24 @@ public class TestBase extends  BaseUtils  {
 
     public static String driverType = System.getProperty("browser"); //"FF";
 
+
    // String driverType = "Chrome";
      @BeforeClass
      public void setUp() throws Exception {
 
          app.init(driverType);//  "Firefox"   Chrome
+
+         app.startExecuteTests( driverType );
+
      }
 
 
 
      @BeforeMethod(alwaysRun = true)
      public void BeforeMethod() {
+         app.startExecuteTests( driverType );
 
-
-        app.startExecuteTests( "http://www.potterybarnkids.com");   // "https://www.potterybarnkids.com"
+         // "https://www.potterybarnkids.com"
 
      }
 
