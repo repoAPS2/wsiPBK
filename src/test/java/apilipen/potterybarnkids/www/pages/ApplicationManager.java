@@ -285,20 +285,36 @@ public class ApplicationManager {
           String driverPath = "";
 
           if ((browser.toLowerCase().contains("firefox")) && (System.getProperty("os.name").toUpperCase().contains("MAC")))
-          {driverPath = "./src/test/java/resourses/webdrivers/mac/geckodriver";}  // geckodriver.sh"
+          {
+               driverPath = "./src/test/java/resourses/webdrivers/mac/geckodriver.sh";
+               System.out.println("identified driver = " + driverPath);
+
+              // driverPath = "./src/test/java/resourses/webdrivers/mac/geckodriver";
+          }  // geckodriver.sh"
 
           else if ((browser.toLowerCase().contains("firefox")) && (System.getProperty("os.name").toUpperCase().contains("WINDOWS")))
           {driverPath = "./src/test/java/resourses/webdrivers/pc/geckodriver.exe";}
 
+          else  if (( browser.toLowerCase().contains("firefox"))  &&   (System.getProperty("os.name").toUpperCase().contains("LINUX")))  {
+               driverPath = "./src/test/java/resourses/webdrivers/lnx/geckodriver.sh";
+               System.out.println("identified driver = " + driverPath);      }
 
-          else if ((browser.toLowerCase().contains("chrome")) && (System.getProperty("os.name").toUpperCase().contains("MAC")))
-          {driverPath = "./src/test/java/resourses/webdrivers/mac/chromedriver";}
+
+
+          else if ((browser.toLowerCase().equals("chrome")) && (System.getProperty("os.name").toUpperCase().contains("MAC")))
+          {driverPath = "./src/test/java/resourses/webdrivers/mac/chromedriver";
+               System.out.println("identified driver = " + driverPath); }
+
+          else if  ((browser .equals("Chrome")) && (System.getProperty("os.name").toUpperCase().contains("LINUX")) ) {
+               driverPath = "./src/test/java/resourses/webdrivers/lnx/chromedriver64";
+               System.out.println("identified driver = " + driverPath); }
 
 
 
           else if ((browser.toLowerCase().contains("chrome")) && (System.getProperty("os.name").toUpperCase().contains("WINDOWS")))
 
-          {driverPath = "./src/main/resources/webdrivers/pc/chromedriver.exe";}
+          {driverPath = "./src/main/resources/webdrivers/pc/chromedriver.exe";
+                }
 
 
 
@@ -331,49 +347,57 @@ public class ApplicationManager {
 
 
 
-
-          if (browser.equalsIgnoreCase("Firefox")) {
-               System.setProperty("webdriver.gecko.driver", driverPath);  // String binaryPath = "/Applications/Firefox54.app/Contents/MacOS/firefox-bin";
-
-               String binaryPath = "/Applications/Firefox54.app/Contents/MacOS/firefox-bin";
-               FirefoxOptions options = new FirefoxOptions();;
-               options.setBinary(binaryPath); //This is the location where you have installed Firefox on your machine
+          switch (browser) {
 
 
-               DesiredCapabilities capabilities = DesiredCapabilities.firefox();
-               capabilities.setCapability("moz:firefoxOptions", options);
-               capabilities.setCapability(FirefoxDriver.MARIONETTE, true);
+               case "firefox":
+                    System.setProperty("webdriver.gecko.driver", driverPath);        // String binaryPath = "/Applications/Firefox54.app/Contents/MacOS/firefox-bin";
 
-               driver = new FirefoxDriver(capabilities);
-               driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+//               String binaryPath = "/Applications/Firefox54.app/Contents/MacOS/firefox-bin";
+//               FirefoxOptions options = new FirefoxOptions();;
+//               options.setBinary(binaryPath); //This is the location where you have installed Firefox on your machine
+//               DesiredCapabilities capabilities = DesiredCapabilities.firefox();
+//               capabilities.setCapability("moz:firefoxOptions", options);
+//               capabilities.setCapability(FirefoxDriver.MARIONETTE, true);
+//               driver = new FirefoxDriver(capabilities);
+
+               driver = new FirefoxDriver();
+               driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
                driver.manage().window().maximize();
 
 
+                    break;
+               case  "chrome":
 
-          } else if (browser.equalsIgnoreCase("Chrome")) {
                System.setProperty("webdriver.chrome.driver", driverPath);
                System.setProperty("webdriver.chrome.silentOutput", "true");
 
                ChromeOptions option = new ChromeOptions();
+                    option.addArguments("disable-infobars");
+                    option.addArguments("--disable-notifications");
 
-               if (System.getProperty("os.name").toUpperCase().contains("MAC")) {
+
+               if (System.getProperty("os.name").toUpperCase().contains("MAC"))
                     option.addArguments("-start-fullscreen");
 
-               } else if (System.getProperty("os.name").toUpperCase().contains("WINDOWS"))
+                else if (System.getProperty("os.name").toUpperCase().contains("LINUX"))
+                         option.addArguments("-start-fullscreen");
 
+                else if (System.getProperty("os.name").toUpperCase().contains("WINDOWS"))
 
-               {
-                    option.addArguments("--start-maximized");
-               } else {
+                                             option.addArguments("--start-maximized");
+
+               else {
                     throw new IllegalArgumentException("Unknown OS");
                }
                driver = new ChromeDriver(option);
                driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 
 
+                    break;
 
+               case  "Safari":
 
-          } else if (browser.equals("Safari")) {
                SafariOptions options = new SafariOptions();
                options.setUseCleanSession(true);
                options.setPort(55555);
@@ -381,7 +405,10 @@ public class ApplicationManager {
                driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
                driver.manage().window().maximize();
 
-          } else if (browser.equals("IE")) {
+                    break;
+
+               case  "IE":
+
                DesiredCapabilities IEDesiredCapabilities = DesiredCapabilities.internetExplorer();
                IEDesiredCapabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
                IEDesiredCapabilities.setCapability(InternetExplorerDriver.INITIAL_BROWSER_URL, "");
@@ -394,20 +421,21 @@ public class ApplicationManager {
                driver = new InternetExplorerDriver(IEDesiredCapabilities);
                driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
                driver.manage().window().maximize();
+                    break;
 
-          } else if (browser.equals("Edge")) {
+               case  "Edge":
                System.setProperty("webdriver.edge.driver", driverPath);
                driver = new EdgeDriver();
                driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
                driver.manage().window().maximize();
+                    break;
 
-
-          } else if (browser.equals("HtmlUnit")) {
+               case  "HtmlUnit":
                driver = new HtmlUnitDriver();
                ((HtmlUnitDriver) driver).setJavascriptEnabled(true);
+                    break;
 
-          } else {
-               throw new IllegalArgumentException("Unknown Broweser");
+               default:     throw new IllegalArgumentException("Unknown Broweser");
           }
      }
 
